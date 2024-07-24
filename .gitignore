@@ -1,0 +1,7 @@
+output/
+venv/
+
+.vscode
+.env
+
+*.pyc
