@@ -1,0 +1,28 @@
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+# metadata:
+#   name: dockebi-endpoint-filter
+#   namespace: service
+spec:
+  # selector:
+  #   matchLabels:
+  #     app: dockebi
+  url: https://storage.googleapis.com/istio-build/proxy/attributegen-359dcd3a19f109c50e97517fe6b1e2676e870c4d.wasm
+  imagePullPolicy: Always
+  phase: AUTHN
+  pluginConfig:
+    attributes:
+      - output_attribute: "request_apigroup"
+        match:
+          - value: "request.url_path.matches('^\\/([^\\/]+)')[0]"
+            condition: "true"
+      # - output_attribute: "request_path"
+      #   match:
+      #     - value: "/v1/stuff"
+      #       condition: "request.url_path == '/v1/stuff'"
+      #     - value: "/v1/stuff/{stuff_id}"
+      #       condition: "request.url_path.matches('^/v1/stuff/[A-Za-z0-9_.-]*$')"
+      #     - value: "/v1/error/400"
+      #       condition: "request.url_path == '/v1/error/400'"
+      #     - value: "/v1/error/500"
+      #       condition: "request.url_path == '/v1/error/500'"

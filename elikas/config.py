@@ -1,5 +1,7 @@
 import os
 
+import utilities
+
 if "__initialized" not in locals():
     __initialized = True
 
@@ -9,9 +11,15 @@ if "__initialized" not in locals():
     COLOR_OFF = "\033[0m"
 
     ENVIRONMENT_VARIABLES = [
-        "ENVIRONMENT",
+        "OPENAPI_PATH",
+        "WASMPLUGIN_PATH",
     ]
 
     [
-        ENVIRONMENT,
+        OPENAPI_PATH,
+        WASMPLUGIN_PATH,
     ] = list(map(os.getenv, ENVIRONMENT_VARIABLES))
+
+    WASMPLUGIN_TEMPLATE = utilities.load_yaml(
+        os.path.join(os.path.dirname(__file__), "wasmplugin.yaml")
+    )
