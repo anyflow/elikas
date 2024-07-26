@@ -1,4 +1,5 @@
 import json
+import re
 import time
 from datetime import datetime
 
@@ -40,6 +41,17 @@ def load_yaml(file_path: str) -> dict:
         except yaml.YAMLError as error:
             print(f"Error while parsing YAML file: {error}")
             exit(1)
+
+
+def wrap_values_and_conditions(file_path: str):
+    with open(file_path, "r") as file:
+        yaml_content = file.read()
+
+    yaml_content = re.sub(r"(\s*-\s*value:\s*)([^\n]+)", r'\1"\2"', yaml_content)
+    yaml_content = re.sub(r"(\s*condition:\s*)([^\n]+)", r'\1"\2"', yaml_content)
+
+    with open(file_path, "w") as file:
+        file.write(yaml_content)
 
 
 def load_json(file_path: str) -> dict:

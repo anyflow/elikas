@@ -1,26 +1,82 @@
-from config import OPENAPI_PATH, WASMPLUGIN_PATH, WASMPLUGIN_TEMPLATE
-from utilities import dump_yaml, load_yaml
+import re
+
+from config import OPENAPI_PATH, WASMPLUGIN_PATH, WASMPLUGIN_TEMPLATE_PATH
+from utilities import dump_yaml, load_yaml, wrap_values_and_conditions
 
 
 def create_wasmplugin() -> None:
     openapi = __validate(load_yaml(OPENAPI_PATH))
 
     app = openapi["x-tcn"]["app"]
-    namespace = openapi["krakendEndpoint"]["backend"]["host"].split(".")[1]
+    namespace = openapi["x-tcn"]["krakendEndpoint"]["backend"]["host"].split(".")[1]
+    paths = openapi.get("paths", {}).keys()
 
+    def request_path_item(path):
+        if "{" in path:
+            pattern = re.sub(r"\{([^}]+)\}", r"[A-Za-z0-9_.-]*", path)
+            condition = f"request.url_path.matches('{pattern}')"
+        else:
+            condition = f"request.url_path == '{path}'"
+
+        return {
+            "value": path,
+            "condition": condition,
+        }
+
+    def request_apigroup_item(path):
+        if match := re.match(r"^\/(v[0-9]+)\/([^\/]+)(?:\/([^\/]+))*$", path):
+            pattern = "/v[0-9]+/" + (
+                f"{match.groups()[1]}/.*"
+                if match.groups()[2]
+                else f"{match.groups()[1]}"
+            )
+            return {
+                "value": match.groups()[1],
+                "condition": f"request.url_path.matches('{pattern}')",
+            }
+        else:
+            apigroup = path.split("/")[1]
+            pattern = f"/{apigroup}/.*"
+            return {
+                "value": apigroup,
+                "condition": f"request.url_path.matches('{pattern}')",
+            }
+
+    seen = set()
+    request_apigroups = []
+
+    for path in paths:
+        if str(apigroup := request_apigroup_item(path)) not in seen:
+            request_apigroups.append(apigroup)
+            seen.add(str(apigroup))
+
+    template = load_yaml(WASMPLUGIN_TEMPLATE_PATH)
     wasmplugin = {
-        **WASMPLUGIN_TEMPLATE,
+        **template,
         "metadata": {
             "name": f"{app}-endpoint-filter",
             "namespace": namespace,
         },
         "spec": {
+            **template.get("spec", {}),
             "selector": {"matchLabels": {"app": app}},
-            **WASMPLUGIN_TEMPLATE.get("spec", {}),
+            "pluginConfig": {
+                "attributes": [
+                    {
+                        "output_attribute": "request_apigroup",
+                        "match": request_apigroups,
+                    },
+                    {
+                        "output_attribute": "request_path",
+                        "match": [request_path_item(path) for path in paths],
+                    },
+                ],
+            },
         },
     }
 
     dump_yaml(wasmplugin, WASMPLUGIN_PATH)
+    wrap_values_and_conditions(WASMPLUGIN_PATH)
     return
 
 
