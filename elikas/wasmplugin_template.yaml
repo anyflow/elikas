@@ -1,7 +1,7 @@
 apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 # metadata:
-#   name: dockebi-endpoint-filter
+#   name: dockebi-endpoint-metric-filter
 #   namespace: service
 spec:
   # selector:

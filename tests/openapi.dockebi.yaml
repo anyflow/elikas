@@ -27,7 +27,7 @@ x-tcn: # mandatory. not null.
   krakendEndpoint: # mandatory. not null. Applied on every krakend endpoint configuration
     # output_encoding: json # The default is no-op
     backend:
-      host: dockebi.service.svc.cluster.local:8080 # mandatory. not null. hostname using in a k8s cluster
+      host: dockebi.ns-service.svc.cluster.local:8080 # mandatory. not null. hostname using in a k8s cluster
       # urlPatternPrefix: "/some_prefix" # The default is "". The value appended in front of every url_pattern
       # encoding: json # The default is no-op
     extra_config:

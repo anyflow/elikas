@@ -900,5 +900,5 @@ spec:
     matchLabels:
       app: tcn-public-apigw
 metadata:
-  name: tcn-public-apigw-endpoint-filter
+  name: tcn-public-apigw-endpoint-metric-filter
   namespace: ns-cluster

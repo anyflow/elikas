@@ -7,7 +7,7 @@ OpenAPI to Istio WasmPlugin, VirtualService converter
 
 ```bash
 # for dockebi
-PYTHONPATH=elikas OPENAPI_PATH=./tests/openapi.dockebi.yaml WASMPLUGIN_PATH=./tests/output.dockebi.yaml python -m elikas
+MODE=tcn PYTHONPATH=elikas OPENAPI_PATH=./tests/openapi.dockebi.yaml WASMPLUGIN_PATH=./tests/output.dockebi.yaml python -m elikas
 # for public-apigw
-PYTHONPATH=elikas OPENAPI_PATH=./tests/openapi.public-apigw.yaml WASMPLUGIN_PATH=./tests/output.public-apigw.yaml python -m elikas
+MODE=tcn PYTHONPATH=elikas OPENAPI_PATH=./tests/openapi.public-apigw.yaml WASMPLUGIN_PATH=./tests/output.public-apigw.yaml python -m elikas
 ```

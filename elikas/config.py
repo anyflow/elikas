@@ -9,13 +9,18 @@ if "__initialized" not in locals():
     COLOR_OFF = "\033[0m"
 
     ENVIRONMENT_VARIABLES = [
-        "OPENAPI_PATH",
-        "WASMPLUGIN_PATH",
+        "MODE",
     ]
 
+    for variable in ENVIRONMENT_VARIABLES:
+        if variable not in os.environ:
+            print(
+                f"{TEXT_RED}ERROR : {variable} environment variable is not set.{COLOR_OFF}"
+            )
+            exit(1)
+
     [
-        OPENAPI_PATH,
-        WASMPLUGIN_PATH,
+        MODE,
     ] = list(map(os.getenv, ENVIRONMENT_VARIABLES))
 
     WASMPLUGIN_TEMPLATE_PATH = os.path.join(

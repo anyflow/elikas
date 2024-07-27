@@ -32,5 +32,5 @@ spec:
     matchLabels:
       app: dockebi
 metadata:
-  name: dockebi-endpoint-filter
-  namespace: service
+  name: dockebi-endpoint-metric-filter
+  namespace: ns-service

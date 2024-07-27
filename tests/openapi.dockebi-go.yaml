@@ -1,0 +1,57 @@
+x-tcn:
+  app: dockebi-go
+  contacts:
+    - name: 박현정
+      email: hyunjeong.park@lge.com
+  teamsTestReportWebhookUrl: https://lgeteams.webhook.office.com/webhookb2/7ebbf6f9-5765-4331-bbcb-0e2a82b472ef@5069cde4-642a-45c0-8094-d0c2dec10be3/IncomingWebhook/ac54bfc5c27f41ba94399976046bb772/20a22dcf-3964-4f9c-838e-33f851428500
+  openapiEndpoint:
+    urlPrefix: /dockebi-go
+  krakendEndpoint:
+    backend:
+      host: dockebi-go.ns-service.svc.cluster.local:8080 # mandatory. not null. hostname using in a k8s cluster
+
+openapi: 3.0.3
+info:
+  title: Dockebi-go service
+  description:
+    "## app : dockebi-go\r\nversion : *latest*\r\n\r\nA service for load\
+    \ testing\n"
+  version: latest
+  contact:
+    name: 박현정
+    email: hyunjeong.park@lge.com
+servers:
+  - url: https://eic-qa-api.lgthinq.com
+  - url: https://eic-qa-green-api.lgthinq.com
+tags:
+  - name: dockebi-go | stuff
+    description: A resource for arbitrary testing
+paths:
+  /dockebi-go/v1/stuff/{id_}:
+    get:
+      summary: Get a stuff by id_
+      operationId: get
+      parameters:
+        - description: size of payload
+          in: path
+          name: id_
+          required: true
+          schema:
+            example: 10kb
+            type: string
+      responses:
+        "200":
+          description: Processed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+      tags:
+        - dockebi-go | stuff
+      security: []
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      name: X-Api-Key
+      in: header

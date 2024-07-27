@@ -33,7 +33,10 @@ push_image: handle_image
 
 .PHONY: all
 all:
+
 .PHONY: clean
 clean:
+
 .PHONY: test
 test:
+	MODE=tcn PYTHONPATH=elikas OPENAPI_PATH=./tests/openapi.dockebi.yaml WASMPLUGIN_PATH=./tests/output.dockebi.yaml python -m elikas

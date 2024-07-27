@@ -1,21 +1,13 @@
+import os
 import re
 
-from config import OPENAPI_PATH, WASMPLUGIN_PATH, WASMPLUGIN_TEMPLATE_PATH
-from utilities import dump_yaml, load_yaml, wrap_values_and_conditions
+from config import WASMPLUGIN_TEMPLATE_PATH
+from utilities import load_yaml
 
-
-def create_from_tcn_openapi() -> None:
-    openapi = validate(load_yaml(OPENAPI_PATH))
-
-    wasmplugin = create(
-        openapi["x-tcn"]["app"],
-        openapi["x-tcn"]["krakendEndpoint"]["backend"]["host"].split(".")[1],
-        openapi.get("paths", {}).keys(),
-    )
-
-    dump_yaml(wasmplugin, WASMPLUGIN_PATH)
-    wrap_values_and_conditions(WASMPLUGIN_PATH)
-    return
+[
+    OPENAPI_PATH,
+    WASMPLUGIN_PATH,
+] = list(map(os.getenv, ["OPENAPI_PATH", "WASMPLUGIN_PATH"]))
 
 
 def create(app: str, namespace: str, openapi_paths: list) -> dict:
@@ -25,7 +17,7 @@ def create(app: str, namespace: str, openapi_paths: list) -> dict:
     return {
         **template,
         "metadata": {
-            "name": f"{app}-endpoint-filter",
+            "name": f"{app}-endpoint-metric-filter",
             "namespace": namespace,
         },
         "spec": {

@@ -1,0 +1,22 @@
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+spec:
+  url: https://storage.googleapis.com/istio-build/proxy/attributegen-359dcd3a19f109c50e97517fe6b1e2676e870c4d.wasm
+  imagePullPolicy: Always
+  phase: AUTHN
+  pluginConfig:
+    attributes:
+      - output_attribute: request_apigroup
+        match:
+          - value: "dockebi-go"
+            condition: "request.url_path.matches('/dockebi-go/.*')"
+      - output_attribute: request_path
+        match:
+          - value: "/dockebi-go/v1/stuff/{id_}"
+            condition: "request.url_path.matches('/dockebi-go/v1/stuff/[A-Za-z0-9_.-]*')"
+  selector:
+    matchLabels:
+      app: dockebi-go
+metadata:
+  name: dockebi-go-endpoint-metric-filter
+  namespace: ns-service

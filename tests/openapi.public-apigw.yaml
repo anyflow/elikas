@@ -1,40 +1,8 @@
-x-tcn: # mandatory. not null.
-  app: tcn-public-apigw # mandatory. not null. Should be same with the directory name contains the file itself.
-  contacts: # mandatory. not null. The first item is used for openapi.info.contact.
-    - name: 박현정 # mandatory. not null.
-      email: hyunjeong.park@lge.com # mandatory
-  teamsTestReportWebhookUrl:
-  openapiEndpoint: # mandatory. not null. Applied on every openapi endpoint configuration
-    urlPrefix: /dockebi # mandatory. not null. The value appended in front of every path
-    # Refer #/components/parameters/XColor, XStorage
-    # parameters:
-    #   - name: X-Color
-    #     in: header
-    #     description: Deployment target to request - blue or green. Default is blue.
-    #     schema:
-    #       type: string
-    #       enum:
-    #         - blue
-    #         - green
-    #   - name: X-Storage
-    #     in: header
-    #     description: Storage type to request - internal or external. Default is internal.
-    #     schema:
-    #       type: string
-    #       enum:
-    #         - internal
-    #         - external
-  krakendEndpoint: # mandatory. not null. Applied on every krakend endpoint configuration
-    # output_encoding: json # The default is no-op
+x-tcn:
+  app: tcn-public-apigw
+  krakendEndpoint:
     backend:
-      host: tcn-public-apigw.ns-cluster.svc.cluster.local:8080 # mandatory. not null. hostname using in a k8s cluster
-      # urlPatternPrefix: "/some_prefix" # The default is "". The value appended in front of every url_pattern
-      # encoding: json # The default is no-op
-    extra_config:
-      auth/api-keys:
-        client_max_rate: 5
-        roles:
-          - dockebi
+      host: tcn-public-apigw.ns-cluster.svc.cluster.local:8080
 
 openapi: 3.0.3
 info:
