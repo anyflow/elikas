@@ -13,7 +13,7 @@ def main(args):
             )
             exit(1)
 
-    bizlogic.create_wasmplugin()
+    bizlogic.create_from_tcn_openapi()
 
 
 if __name__ == "__main__":

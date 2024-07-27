@@ -7,7 +7,6 @@ spec:
   selector:
     matchLabels:
       app: dockebi
-    matchNamespace: service
 
   openapi:
     openapi: 3.0.3

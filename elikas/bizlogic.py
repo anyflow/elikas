@@ -4,16 +4,25 @@ from config import OPENAPI_PATH, WASMPLUGIN_PATH, WASMPLUGIN_TEMPLATE_PATH
 from utilities import dump_yaml, load_yaml, wrap_values_and_conditions
 
 
-def create_wasmplugin() -> None:
-    openapi = __validate(load_yaml(OPENAPI_PATH))
-    app = openapi["x-tcn"]["app"]
-    namespace = openapi["x-tcn"]["krakendEndpoint"]["backend"]["host"].split(".")[1]
-    paths = openapi.get("paths", {}).keys()
+def create_from_tcn_openapi() -> None:
+    openapi = validate(load_yaml(OPENAPI_PATH))
 
+    wasmplugin = create(
+        openapi["x-tcn"]["app"],
+        openapi["x-tcn"]["krakendEndpoint"]["backend"]["host"].split(".")[1],
+        openapi.get("paths", {}).keys(),
+    )
+
+    dump_yaml(wasmplugin, WASMPLUGIN_PATH)
+    wrap_values_and_conditions(WASMPLUGIN_PATH)
+    return
+
+
+def create(app: str, namespace: str, openapi_paths: list) -> dict:
     template = load_yaml(WASMPLUGIN_TEMPLATE_PATH)
-
     seen = set()
-    wasmplugin = {
+
+    return {
         **template,
         "metadata": {
             "name": f"{app}-endpoint-filter",
@@ -28,26 +37,22 @@ def create_wasmplugin() -> None:
                         "output_attribute": "request_apigroup",
                         "match": [
                             item
-                            for path in paths
+                            for path in openapi_paths
                             if str(item := __request_apigroup_item(path)) not in seen
                             and not seen.add(str(item))
                         ],
                     },
                     {
                         "output_attribute": "request_path",
-                        "match": [__request_path_item(path) for path in paths],
+                        "match": [__request_path_item(path) for path in openapi_paths],
                     },
                 ],
             },
         },
     }
 
-    dump_yaml(wasmplugin, WASMPLUGIN_PATH)
-    wrap_values_and_conditions(WASMPLUGIN_PATH)
-    return
 
-
-def __validate(openapi: dict) -> dict:
+def validate(openapi: dict) -> dict:
     # TODO: Validate OpenAPI
     return openapi
 

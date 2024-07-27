@@ -31,8 +31,6 @@ spec:
                       type: object
                       additionalProperties:
                         type: string
-                    matchNamespace:
-                      type: string
                 openapi:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
