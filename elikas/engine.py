@@ -51,7 +51,8 @@ def validate(openapi: dict) -> dict:
 
 def __request_path_item(path):
     if "{" in path:
-        pattern = re.sub(r"\{([^}]+)\}", r"[A-Za-z0-9_.-]*", path)
+        pattern = re.sub(r"\{([^}]+)\}", r"^[A-Za-z0-9_.-]*$", path)
+        # pattern = re.sub(r"\{([^}]+)\}", r"^[:alnum:]*$", path)
         condition = f"request.url_path.matches('{pattern}')"
     else:
         condition = f"request.url_path == '{path}'"
@@ -65,7 +66,7 @@ def __request_path_item(path):
 def __request_apigroup_item(path):
     if match := re.match(r"^\/(v[0-9]+)\/([^\/]+)(?:\/([^\/]+))*$", path):
         pattern = "/v[0-9]+/" + (
-            f"{match.groups()[1]}/.*" if match.groups()[2] else f"{match.groups()[1]}"
+            f"^{match.groups()[1]}/.*$" if match.groups()[2] else f"{match.groups()[1]}"
         )
         return {
             "value": match.groups()[1],
@@ -75,5 +76,5 @@ def __request_apigroup_item(path):
         apigroup = path.split("/")[1]
         return {
             "value": apigroup,
-            "condition": f"request.url_path.matches('/{apigroup}/.*')",
+            "condition": f"request.url_path.matches('^/{apigroup}/.*$')",
         }
