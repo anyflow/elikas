@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: gateway
-  url: oci://docker-registry.anyflow.net/openapi-path-filter:0.1.0
+  url: docker-registry.anyflow.net/openapi-path-filter:latest
   pluginConfig:
     openapi: 3.0.0
     paths:

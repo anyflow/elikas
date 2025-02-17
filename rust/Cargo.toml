@@ -11,3 +11,5 @@ proxy-wasm = "0.2.2"
 serde_json = "1.0.138"
 matchit = "0.8.6"
 serde = { version = "1.0.217", features = ["derive"] }
+log = "0.4.25"
+env_logger = "0.11.6"

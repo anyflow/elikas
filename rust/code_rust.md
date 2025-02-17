@@ -1,6 +1,6 @@
 # Source code를 통한 Rust 언어 특징
 
-## 1. Ownership과 Borrowing (소유권과 대여)
+## 1. Ownership과 Borrowing
 
 Rust는 메모리 안전성을 보장하기 위해 소유권(ownership) 시스템을 사용합니다.
 여기서 Arc<T>(Atomic Reference Counting)는 여러 개의 소유자가 안전하게 공유할 수 있도록 참조 카운팅을 지원하는 스마트 포인터입니다.
@@ -12,7 +12,7 @@ router: Arc<Router<String>> // Arc로 공유 (readonly. writable은 Arc<Mutex<T>
 - `Arc<T>`는 다중 스레드 환경에서도 안전하게 데이터를 공유할 수 있도록 도와줍니다.
 - `Arc::clone(&self.router)`을 사용하여 참조를 복사할 수 있지만, 이는 새로운 복사본이 아니라 같은 데이터를 참조하는 카운트 증가입니다.
 
-## 2. 패턴 매칭 (Pattern Matching)
+## 2. Pattern Matching
 
 Rust는 match 문을 사용하여 다양한 경우를 간결하게 처리합니다.
 
@@ -104,7 +104,7 @@ Rust 자체는 멀티스레드와 비동기 실행을 지원하지만, 이 코�
 
 Rust의 메모리 안전성과 성능을 유지하면서도 C++, Java와는 다른 방식으로 동작하는 점이 흥미로운 부분입니다.
 
-## `Some()`에 관하여
+## 8. `Some()`에 관하여
 
 `Some()`은 Rust에서 `Option<T>` 타입의 일부로, 값이 존재할 때 사용되는 열거형(Enumeration, Enum) 변형(Variant)입니다.
 
@@ -192,7 +192,7 @@ fn create_http_context(&self, _: u32) -> Option<Box<dyn HttpContext>> {
 
 Rust는 `null` 참조가 없기 때문에, `Option<T>`을 적극적으로 활용해야 합니다.
 
-## `Box::new()`에 관하여
+## 9. `Box::new()`에 관하여
 
 `Box::new()`는 Rust의 스마트 포인터(Smart Pointer) 중 하나인 `Box<T>`를 생성하는 함수입니다.
 **Heap 메모리에 데이터를 저장하고, 그 포인터를 반환하는 역할**을 합니다.

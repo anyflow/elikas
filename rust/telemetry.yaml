@@ -13,7 +13,7 @@ spec:
             metric: ALL_METRICS # https://istio.io/latest/docs/reference/config/telemetry/#MetricSelector-IstioMetric
             mode: CLIENT_AND_SERVER # https://istio.io/latest/docs/reference/config/telemetry/#WorkloadMode
           tagOverrides:
-            method:
+            request_method:
               value: request.method
-            openapi_path:
+            request_path:
               value: request.headers['x-openapi-path']

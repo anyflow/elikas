@@ -5,6 +5,8 @@ use proxy_wasm::{
 };
 use serde_json::Value;
 use matchit::Router;
+use log::{info};
+// use log::{info, warn, error};
 
 proxy_wasm::main! {{
     proxy_wasm::set_log_level(LogLevel::Trace);
@@ -45,6 +47,11 @@ struct OpenapiPathRootContext {
 impl Context for OpenapiPathRootContext {}
 
 impl RootContext for OpenapiPathRootContext {
+    fn on_vm_start(&mut self, _vm_configuration_size: usize) -> bool {
+        info!("openapi-path-filter successfully created and started!");
+        true
+    }
+
     fn on_configure(&mut self, _: usize) -> bool {
         // Get plugin configuration
         if let Some(config_bytes) = self.get_plugin_configuration() {
@@ -56,7 +63,7 @@ impl RootContext for OpenapiPathRootContext {
             if let Some(paths) = config_json.get("paths").and_then(Value::as_object) {
                 for (path, _) in paths {
                     if let Err(e) = new_router.insert(path.clone(), path.clone()) {
-                        let _ = proxy_wasm::hostcalls::log(LogLevel::Warn, &format!("Failed to insert route: {}", e));
+                        info!("Failed to insert route: {e}");
                     }
                 }
             }
